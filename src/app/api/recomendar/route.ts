@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { recomendar } from "@/lib/motor/motor";
 import type { EntradaMotor } from "@/lib/motor/tipos";
+import { narrarWaytaMock } from "@/lib/ia/narrador-mock";
 
 export async function POST(req: Request) {
   try {
@@ -22,7 +23,10 @@ export async function POST(req: Request) {
     }
 
     const recomendado = recomendar(body);
-    return NextResponse.json({ recomendado });
+
+    const narracion = narrarWaytaMock(recomendado);
+
+    return NextResponse.json({ recomendado, narracion });
   } catch (e) {
     return NextResponse.json(
       { error: "Error procesando la recomendación" },
