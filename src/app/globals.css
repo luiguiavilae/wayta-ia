@@ -1,7 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 
 /* -------------------------------
-   RESET AGRESIVO (para matar "tablas")
+   CUSTOM PROPERTIES
+-------------------------------- */
+:root {
+  --color-bg: #0a0a0a;
+  --color-bg-warm: #0f0d0b;
+  --color-surface: #161412;
+  --color-surface-hover: #1e1b18;
+  --color-border: rgba(255, 235, 205, 0.08);
+  --color-border-active: rgba(255, 235, 205, 0.2);
+  --color-accent: #c8a97e;
+  --color-accent-soft: rgba(200, 169, 126, 0.15);
+  --color-text: #f5f0eb;
+  --color-text-muted: rgba(245, 240, 235, 0.6);
+  --color-text-subtle: rgba(245, 240, 235, 0.4);
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* -------------------------------
+   RESET
 -------------------------------- */
 *,
 *::before,
@@ -9,41 +29,21 @@
   box-sizing: border-box;
 }
 
-html,
-body {
+html {
   height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100%;
   margin: 0;
-  background:
-    radial-gradient(1200px 700px at 20% 10%, rgba(255,255,255,0.06), transparent 60%),
-    radial-gradient(900px 600px at 80% 0%, rgba(255,255,255,0.05), transparent 55%),
-    radial-gradient(700px 500px at 70% 80%, rgba(255,255,255,0.04), transparent 60%),
-    linear-gradient(180deg, #07070a, #0b0b10 35%, #07070a);
-  color: rgba(255, 255, 255, 0.92);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
-    "Apple Color Emoji", "Segoe UI Emoji";
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Elimina estilos raros heredados */
-table {
-  border-collapse: separate !important;
-  border-spacing: 0 !important;
-}
-
-/* Asegura que no se "pinten" bordes globales */
-table,
-thead,
-tbody,
-tr,
-td,
-th {
-  border: none !important;
-  outline: none !important;
-}
-
-/* Inputs consistentes */
 button,
 input,
 select,
@@ -51,26 +51,41 @@ textarea {
   font: inherit;
 }
 
-/* Scrollbar suave */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 6px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(200, 169, 126, 0.2);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
+  background: transparent;
 }
 
 /* -------------------------------
-   COMPONENTES WAYTA (reutilizables)
+   TYPING ANIMATION
+-------------------------------- */
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typing-cursor::after {
+  content: '|';
+  animation: blink-caret 0.8s step-end infinite;
+  color: var(--color-accent);
+  font-weight: 300;
+  margin-left: 2px;
+}
+
+/* -------------------------------
+   TAILWIND UTILITIES
 -------------------------------- */
 @utility wayta-card {
   border-radius: 1.5rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.04);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
   box-shadow: 0 20px 80px rgba(0, 0, 0, 0.45);
 }
 
@@ -79,42 +94,55 @@ textarea {
   align-items: center;
   gap: 0.5rem;
   border-radius: 9999px;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.05);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-accent-soft);
   padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   line-height: 1rem;
-  color: rgb(255 255 255 / 0.7);
+  color: var(--color-accent);
 }
 
 @utility wayta-btn {
-  border-radius: 1rem;
-  border: 1px solid rgb(255 255 255 / 0.15);
-  background-color: rgb(255 255 255 / 0.1);
-  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-accent);
+  background-color: transparent;
+  padding: 0.75rem 2rem;
   font-size: 0.875rem;
   line-height: 1.25rem;
-  font-weight: 600;
-  color: rgb(255 255 255 / 0.9);
-  transition: all 0.15s;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+  transition: all 0.3s ease;
+  cursor: pointer;
   &:hover {
-    background-color: rgb(255 255 255 / 0.15);
+    background-color: var(--color-accent);
+    color: var(--color-bg);
   }
   &:active {
-    transform: scale(0.99);
+    transform: scale(0.98);
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    &:hover {
+      background-color: transparent;
+      color: var(--color-accent);
+    }
   }
 }
 
 @utility wayta-btn-soft {
-  border-radius: 1rem;
-  border: 1px solid rgb(255 255 255 / 0.1);
-  background-color: rgb(255 255 255 / 0.05);
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-border);
+  background-color: transparent;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.8125rem;
   line-height: 1.25rem;
-  color: rgb(255 255 255 / 0.75);
-  transition: all 0.15s;
+  color: var(--color-text-muted);
+  transition: all 0.3s ease;
+  cursor: pointer;
   &:hover {
-    background-color: rgb(255 255 255 / 0.1);
+    border-color: var(--color-border-active);
+    color: var(--color-text);
   }
 }
