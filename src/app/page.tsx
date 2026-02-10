@@ -71,6 +71,31 @@ const DESTINATARIOS: { value: DireccionRegalo; label: string; desc: string; icon
   { value: "para_otro", label: "Para otra persona", desc: "Un obsequio cargado de intención", icon: "❈" },
 ];
 
+/* ───────────── IMAGEN POR ARQUETIPO + PALETA ───────────── */
+const IMAGEN_RITUAL: Record<string, { src: string; alt: string }> = {
+  "florecimiento-aire": {
+    src: "/rituales/florecimiento-aire.png",
+    alt: "Arreglo de Amancay con cuarzo transparente y vela de flor de naranja",
+  },
+  "proteccion-tierra": {
+    src: "/rituales/proteccion-tierra.png",
+    alt: "Arreglo de Retama con obsidiana y vela de muña",
+  },
+  "vinculo-agua": {
+    src: "/rituales/vinculo-agua.png",
+    alt: "Arreglo de Flor de Sauco con cuarzo rosado y vela de flor de naranja",
+  },
+  "fuerza-fuego": {
+    src: "/rituales/fuerza-fuego.png",
+    alt: "Arreglo de Cantuta con pirita y vela de cedro andino",
+  },
+};
+
+function getImagenRitual(arquetipo: string, paleta: string) {
+  const key = `${arquetipo}-${paleta}`;
+  return IMAGEN_RITUAL[key] ?? IMAGEN_RITUAL["florecimiento-aire"];
+}
+
 /* ───────────── ANIMACIONES ───────────── */
 const fadeUp = {
   initial: { opacity: 0, y: 30 },
@@ -627,7 +652,7 @@ export default function Page() {
                 className="pb-20 pt-8"
               >
                 {/* Divider */}
-                <div className="mb-16 flex items-center gap-4">
+                <div className="mb-12 flex items-center gap-4">
                   <div
                     className="h-px flex-1"
                     style={{ background: "var(--color-border-active)" }}
@@ -643,6 +668,46 @@ export default function Page() {
                     style={{ background: "var(--color-border-active)" }}
                   />
                 </div>
+
+                {/* Imagen del arreglo */}
+                {(() => {
+                  const img = getImagenRitual(
+                    resultado.recomendado.arquetipoDominante,
+                    resultado.recomendado.paleta
+                  );
+                  return (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      className="mb-12 flex justify-center"
+                    >
+                      <div
+                        className="relative overflow-hidden rounded-3xl"
+                        style={{
+                          border: "1px solid var(--color-border)",
+                          boxShadow: "0 30px 100px rgba(0,0,0,0.5)",
+                          maxWidth: "420px",
+                          width: "100%",
+                        }}
+                      >
+                        <img
+                          src={img.src}
+                          alt={img.alt}
+                          className="block w-full h-auto"
+                          style={{ display: "block" }}
+                        />
+                        <div
+                          className="absolute inset-0 pointer-events-none"
+                          style={{
+                            background:
+                              "linear-gradient(180deg, transparent 60%, rgba(10,10,10,0.6) 100%)",
+                          }}
+                        />
+                      </div>
+                    </motion.div>
+                  );
+                })()}
 
                 {/* Título */}
                 <motion.h2
